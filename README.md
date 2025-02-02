@@ -25,7 +25,7 @@ npm run test;
 
 Run benchmark script to generate zkp with Groth16:
 
-Download the required [ptau files](https://github.com/iden3/snarkjs) for setup.
+Download the required [ptau files](https://github.com/iden3/snarkjs) for the setup, specifically `pot13_final.ptau`, and place it in the `.ptau` directory.  
 
 ```sh
 bash run_groth16.sh;
