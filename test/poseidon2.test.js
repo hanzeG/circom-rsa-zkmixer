@@ -13,7 +13,7 @@ describe("Poseidon2 Circuit test", function () {
         circuit = await wasm_tester(path.join(__dirname, "circuits", "poseidon2_3_test.circom"));
     });
 
-    it("Should check constrain of hash([1, 1, 1]) t=3", async () => {
+    it("Should check constrain of hash([1, 1, 1])", async () => {
         const input = [1, 1, 1];
         const res2 = await poseidon2_hash(input);
         console.log(res2);
