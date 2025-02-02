@@ -1,10 +1,8 @@
-# Implementation of RSA-based Stealth Address
+# Implementation of "Stealth Address"-based Mixer
 
-This repository provides an implementation of a Zero-Knowledge Proof for the RSA accumulator algorithm in the [Circom](https://docs.circom.io) language. It supports a tumbler based on an incremental Merkle tree UTXO model, enabling non-interactive [stealth address](https://hinkal-team.gitbook.io/hinkal/hinkal/setup/keys-and-shielded-addresses) functionality. For reference, the interactive stealth address functionality implemented by [Hinkal](https://hinkal-team.gitbook.io/hinkal) can be considered. This tumbler provides the following functionalities: private external transfers, private internal transfers, and private withdrawals.
+Privacy remains a fundamental challenge in public blockchain ecosystems. On platforms like Ethereum, transaction data is inherently transparent, allowing for unrestricted access and analysis. While zero-knowledge proof (ZKP) technologies have given rise to privacy-preserving protocols, such as ZKP mixers, these solutions have been limited to transactions between addresses within the same entity and typically support only a narrow range of assets. For example, Tornado Cash (TC), which was sanctioned in 2022, primarily facilitated privacy-preserving transfers of native tokens and popular ERC-20 tokens.
 
-Specifically, private external transfers allow a sender to transfer funds to a recipient who has already registered an account in the tumbler, without the sender needing to register or deposit in advance. These transactions are unlinkable between the sender and the recipient. Private internal transfers or withdrawals allow a sender to secretly spend their UTXOs held by the tumbler to either withdraw funds or transfer them to another registered user (generating a new UTXO). Both transaction types maintain unlinkability.
-
-The circuit templates under the circuits directory currently support functionalities such as modular exponentiation for arbitrary large integers, verification of a secret’s membership in an RSA accumulator based on \phi(N), and Merkle tree membership proof algorithms. Tests for these algorithms, including the tumbler’s business logic circuit templates, are provided under the test directory.
+This work introduces an approach leveraging ["stealth addresses"](https://vitalik.eth.limo/general/2023/01/20/stealth.html) to enable privacy-preserving transactions involving cross-entity transfers and flexible assets. This repository provides an implementation of a Zero-Knowledge Proof for the mixing service using RSA-based Public Key Encryption (PKE) algorithms in the [Circom](https://docs.circom.io) language. The system, referred to as SAM, allows for direct transfers to globally public addresses, ensuring complete privacy for the recipient's address. By expanding the anonymous set beyond deposit addresses and removing constraints on fixed-asset denominations, the proposed solution enhances privacy while improving the usability of ZKP-based mixers.
 
 # Getting started
 
@@ -14,14 +12,30 @@ To run the circuit test cases:
 git submodule update --init --recursive
 ```
 ```sh
-cd blockchain_ZKPs; npm i; cd ..; npm i; npm test
+cd circomlib; npm i;
 ```
 
-[blockchain_ZKP]((https://github.com/badblood8/blockchain_ZKPs)) is a library implemented in Circom for primality testing algorithms, and [circom-ecdsa](https://github.com/0xPARC/circom-ecdsa) provides circuit templates for modular exponentiation of large integers with fixed exponent sizes (non-input signals), among other functionalities.
+Download Circom: follow the instructions at installing [Circom](https://docs.circom.io/getting-started/installation/).
+
+To test all circuits and generate input files for test circuits:
+
+```sh
+npm run test;
+```
+
+Run benchmark script to generate zkp with Groth16:
+
+Download the required [ptau files](https://github.com/iden3/snarkjs) for setup.
+
+```sh
+bash run_groth16.sh;
+```
+
+This repository utilizes [blockchain_ZKPs](https://github.com/badblood8/blockchain_ZKPs), a Circom library for primality testing algorithms, and [circom-ecdsa](https://github.com/0xPARC/circom-ecdsa), which provides circuit templates for modular exponentiation of large integers with fixed exponent sizes (non-input signals), among other functionalities.  
 
 ## Circuits Benchmark
 
-* Mac (Apple M1 Pro, 2021), 10-core CPU, 16GB RAM
+* MacBook (Apple M1 Pro, 16 GB memory, 10-core CPU)
 <!-- * Proof system: Groth16 -->
 
 | Test Case               | Template Instances | Non-linear Constraints | Linear Constraints | Public Inputs | Private Inputs           | Public Outputs | Wires     | Labels    |
